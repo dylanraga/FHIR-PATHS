@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>FHIR-PATHS</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="./style/normalize.css">
+		<link rel="stylesheet" href="./style/style.css">
+		<script src="https://rawgithub.com/smart-on-fhir/client-js/master/dist/fhir-client.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<!--[if lt IE 7]>
+			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+	<div class='paper'>
+		<nav>
+				<ul>
+					<li><a href='#about'>About</a></li>
+					<li><a href='#search'>Search</a></li>
+				</ul>
+			</nav>
+			<div id='search' class='paper-body'>
+				<h1>Search</h1>
+				<form id='form-patientsearch'>
+					<label>Patient</label>
+					<select name='identifier'>
+						<option value='name'>Name</option>
+						<option value='_id'>ID</option>
+					</select>
+					<input type='text' name='patient'>
+					<input type='submit'>
+				</form>
+				<div id='search-results'>
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<div id='about' class='paper-body'>
+				<h1>FHIR-PATHS</h1>
+
+				<h2>“Healthcare Delayed is Healthcare Deprived”</h2>
+				<p>The ultimate goal is to provide a framework/solution that will interchange Health Information across Healthcare Facilities, not just within a metropolitan city, not within a certain region, but all over a given country in Asia-Pacific. For example, an Overseas Filipino Worker who was last seen by a doctor in a Rural Health Clinic in San Quintin, Pangasinan can readily be seen by another Healthcare Facility in Marawi City.</p>
+				<p>How can this be achieved when the Internet connection is not always reliable, especially in the remote villages where it is just online occasionally?</p>
+
+				<hr>
+				
+				<h3>Problem</h3>
+				<p>In many developing countries like the Philippines, sharing of patient data from one facility to another facility is often not yet possible. For example, if a patient visits a rural health center, they would not be able to transfer their records to a different hospital.</p>
+				<p>This leads to redundancy of tests as the tests done in one facility may not be honored or cannot be accessed in another facility. Implementing an in-country health information exchange (HIE) is challenging due to the absence of a strong infrastructure to support the HIE implementation.</p>
+
+				<hr>
+				
+				<h3>Task</h3>
+				<p>Design and implement a solution for personal health data sharing and patient journey in a low-resource setting (offline, occasionally online)</p>
+
+				<hr>
+				
+				<h3>Proposed Solution and Scenarios</h3>
+				<p>We propose a solution which works offline (cached pages/resources and local storage) and online (live web pages and centralized repository). The solution is functional, accessible, and affordable.</p>
+				<p>It is a Web-based application, using RESTful API based on FHIR health data messaging. The solution has these basic operations:</p>
+				<ul>
+					<li>Submit/Create (POST)</li>
+					<li>Query/Read (GET)</li>
+					<li>Modify/Update (PUT)</li>
+					<li>Download/Save (using cookies, web storage)</li>
+				</ul>
+				<p>Initially, it is a typical web-based application which we could easily transition to Progressive Web Application (PWA) and/or be customized to be an "App Store" application that can easily be used on mobile phones, tablets, and other forms of mobile devices.</p>
+				<q>“Man’s epic journey to the moon, and eventually to Mars and beyond, started with a single step. Likewise, the solution we propose is very simple yet highly effective, that we can easily evolve to bigger more complex systems in a short period of time.”</q>
+				<h4>Assumption</h4>
+				<p>Each Rural Health Center (RHC) has a Computer System that has the power to occasionally connect to the Internet and has the minimum hard drive requirement to store Health Information on demand. It is also assumed that Facilities and Practitioners are concerned about protecting patient information and privacy.</p>
+				<h4>Scenario 1</h4>
+				<p>Rural Health Clinic (RHC) that has Internet connection (Online). Business as usual. Whatever changes made to the local repository (like patient visit and allergies) shall be smartly uploaded to the central repository at a given time, or when the system is not busy doing other chores.</p>
+				<h4>Scenario 2</h4>
+				<p>Rural Health Clinic (RHC) that is Offline. RHC uses its local repository which was populated (last updated) when it was online. RHC shall start by searching for the name of the patient in the local repository.</p>
+				<h4>Scenario 3</h4>
+				<p>RHC searches for the patient on the local repository but cannot be found. Patient has 3 options, Cellphone SMS or file, magnetic stripe, QR code. This is to locally retrieve and show relevant Health Info like Patient Info, Patient Visits, Allergies, etc., if available. If the patient has the Info, then it means that the Patient info has been previously saved to the Central Repository.</p>
+				<h4>Scenario 4</h4>
+				<p>The patient record cannot be retrieved based on the scenarios above. Ask if the patient is a first-time patient under this system. Then we start with onboarding a new patient.</p>
+				<h4>Worse-case Scenario</h4>
+				<p>The patient is not a new patient (has existing records) but the system is offline and the patient cannot show system records from his mobile device or from email/text. The patient will be attended to, treated if needed, but record keeping will be done like on pen and paper. This will be manually appended to the database after some time.</p>
+				<p>Healthcare service is the top priority. Effective and efficient medical record keeping will follow.</p>
+
+				<hr>
+				
+				<h3>Implementation</h3>
+				<p>There is a lot of free software libraries available but for this hackathon, we are leaning on a Javascript library called FHIR.js or SMART on FHIR API.</p>
+				<p>For the Proof of Concept, we will be building and testing various operations using open sandbox http://hapi.fhir.org/ on these models:</p>
+				<ul>
+					<li>Patient</li>
+					<li>Practitioner</li>
+					<li>Order</li>
+					<li>Medication</li>
+					<li>Condition</li>
+					<li>Allergies</li>
+				</ul>
+				<p>The primary concern is how to provide a solution for offline access. We will focus on creating HTML5 Offline Web Applications which is geared to create compelling web applications that can still be used when there is no Internet connection. On the data storage side, aside from localStorage, we will be looking at an in-browser database such as IndexedDB https://www.w3.org/TR/IndexedDB/ that allows applications to save data locally.</p>
+				<p>We are therefore geared to be always on top on these challenges:</p>
+				<ul>
+					<li>Offline functionality — App should be able to work completely offline once installed.</li>
+					<li>Syncing local data to the server — Sync local data and remote data without any loss.</li>
+					<li>Intermittent internet condition — App should reliably sync data even with the bad internet connection.</li>
+				</ul>
+
+				<hr>
+				
+				<h3>Work Plan</h3>
+				<ul>
+					<li>August 10-13: Review FHIR resources</li>
+					<li>August 12-15: Play around using FHIR.js</li>
+					<li>August 15: Submissions of Hackathon Entry</li>
+					<li>August 16: Setting up the domain, URL, web host</li>
+					<li>August 17-30: Build, Test, and Deploy Prototype/Demo (online and offline)</li>
+					<li>August 28-31: Work on the “Pitch”</li>
+				</ul>
+			</div>
+		</div>
+
+		
+		<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+		<script>
+			// Initialize Firebase
+			var config = {
+				apiKey: "AIzaSyDB_j9X1oQAwVaguZwTg7zxhEjGOctIGqA",
+				authDomain: "fhir-paths.firebaseapp.com",
+				databaseURL: "https://fhir-paths.firebaseio.com",
+				projectId: "fhir-paths",
+				storageBucket: "",
+				messagingSenderId: "1040988469666"
+			};
+			firebase.initializeApp(config);
+		</script>
+		<script src="./js/events.js" async defer></script>
+	</body>
+</html>
